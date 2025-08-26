@@ -1,0 +1,118 @@
+# This workflow automates the build and release process for the Kompres application.
+# It is designed to replace the manual steps in the `scripts/release.sh` script.
+#
+# Workflow Triggers:
+# 1. `push` to tags matching 'v*.*.*' (e.g., v1.2.3)
+# 2. `workflow_dispatch` for manual runs from the GitHub Actions UI.
+#
+# Workflow Logic:
+# 1. `build` job:
+#    - Runs in parallel on macOS, Windows, and Linux.
+#    - Sets up Node.js and caches npm dependencies for speed.
+#    - Installs system dependencies required for the build (especially on Linux for `sharp` and `usb`).
+#    - Runs the platform-specific build script from `package.json`.
+#    - Uploads the build artifacts from the `dist/` directory.
+#
+# 2. `release` job:
+#    - Runs only after all `build` jobs have succeeded.
+#    - Downloads all build artifacts.
+#    - Creates a new GitHub Release associated with the git tag.
+#    - Automatically generates release notes.
+#    - Uploads all the compiled artifacts (.dmg, .exe, .AppImage, etc.) to the release.
+
+name: Create Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Cache npm dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install Linux build dependencies
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libvips-dev libgdk-pixbuf2.0-dev libgtk-3-dev libnss3 libasound2 libudev-dev libusb-1.0-0-dev
+
+      - name: Build for macOS
+        if: matrix.os == 'macos-latest'
+        run: npm run build:local:mac
+
+      - name: Build for Linux
+        if: matrix.os == 'ubuntu-latest'
+        run: npm run build:local:linux
+
+      - name: Build for Windows
+        if: matrix.os == 'windows-latest'
+        shell: pwsh
+        run: npm run build:local:win
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts-${{ matrix.os }}
+          path: dist/
+
+  release:
+    name: Create GitHub Release
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download all build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts/
+          merge-multiple: true # This option merges artifacts into a single directory
+
+      - name: List downloaded artifacts for debugging
+        run: ls -R artifacts/
+
+      - name: Get version from tag
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Kompres ${{ env.VERSION }}
+          generate_release_notes: true
+          files: artifacts/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
