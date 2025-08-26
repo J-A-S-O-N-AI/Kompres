@@ -1,0 +1,52 @@
+# Dependabot configuration version 2
+# See documentation for all options: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+version: 2
+updates:
+  # Maintain dependencies for npm (package.json)
+  - package-ecosystem: "npm"
+    directory: "/" # Location of package.json
+    schedule:
+      interval: "daily"
+      time: "04:00" # Run at 4 AM UTC
+      timezone: "UTC"
+    open-pull-requests-limit: 15 # Limit the number of open PRs to avoid spam
+    rebase-strategy: "auto" # Automatically rebase PRs to resolve conflicts
+    commit-message:
+      # Use a conventional commit prefix for dependency updates
+      prefix: "chore(deps)"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "npm"
+    # Group related dependencies to reduce the number of pull requests
+    groups:
+      # Group electron and its builder together as they are often updated in tandem
+      electron:
+        patterns:
+          - "electron"
+          - "electron-builder"
+      # Group all linting, formatting, and eslint-related packages
+      eslint:
+        patterns:
+          - "eslint*"
+          - "prettier"
+      # Group all AWS SDK packages
+      aws-sdk:
+        patterns:
+          - "@aws-sdk/*"
+
+  # Maintain dependencies for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/" # Location of workflow files
+    schedule:
+      interval: "daily"
+      time: "04:00"
+      timezone: "UTC"
+    labels:
+      - "dependencies"
+      - "github-actions"
+    # It's generally safe to group all GitHub Actions updates together
+    groups:
+      github-actions:
+        patterns:
+          - "*"

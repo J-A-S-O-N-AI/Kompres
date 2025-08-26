@@ -1,0 +1,755 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kompres</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    />
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="logo">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <rect width="32" height="32" rx="6" fill="url(#logo-gradient)" />
+              <path d="M9 8h8v16H9V8z" fill="white" opacity="0.9" />
+              <path d="M15 8h8v16h-8V8z" fill="white" opacity="0.7" />
+                        <defs>
+                <linearGradient id="logo-gradient" x1="0" y1="0" x2="32" y2="32">
+                                <stop offset="0%" stop-color="#667eea" />
+                                <stop offset="100%" stop-color="#764ba2" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+            <h1>Kompres</h1>
+                </div>
+                <div class="header-actions">
+            <div class="header-btn-group">
+                    <button
+                        id="settings-btn"
+                        class="icon-btn"
+                title="Settings & Preferences"
+                        type="button"
+                aria-label="Open settings and preferences"
+                    >
+                        <svg
+                            width="20"
+                            height="20"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            viewBox="0 0 24 24"
+                        >
+                  <circle cx="12" cy="12" r="3"></circle>
+                            <path
+                    d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001 1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"
+                  ></path>
+                        </svg>
+                <span class="icon-label">Settings</span>
+                    </button>
+              <button id="about-btn" class="icon-btn" title="About & Help" type="button">
+                        <svg
+                            width="20"
+                            height="20"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            viewBox="0 0 24 24"
+                        >
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <path d="M12 6v12m0-6h6m-6 0H6"></path>
+                </svg>
+                <span class="icon-label">About</span>
+              </button>
+            </div>
+            <!-- Window Controls (shown on Windows/Linux) -->
+            <div id="window-controls" class="window-controls" style="display: none">
+              <button id="minimize-btn" class="window-control-btn" title="Minimize">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M20 14H4v-4h16v4z" />
+                </svg>
+              </button>
+              <button id="maximize-btn" class="window-control-btn" title="Maximize">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M4 4h16v16H4V4m2 2v12h12V6H6z" />
+                </svg>
+              </button>
+              <button id="close-btn" class="window-control-btn close-btn" title="Close">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"
+                  />
+                        </svg>
+                    </button>
+            </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="app-main">
+            <!-- File Drop Zone -->
+            <div id="drop-zone" class="drop-zone" tabindex="0">
+                <div class="drop-zone-content">
+                    <svg
+                        class="drop-icon"
+                        width="64"
+                        height="64"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                        />
+                    </svg>
+                    <h2>Drop PDF files here</h2>
+                    <p>or click to browse</p>
+                    <div class="drop-zone-actions">
+                        <button id="browse-files" class="btn btn-primary" type="button">
+                            <svg
+                                width="20"
+                                height="20"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                viewBox="0 0 24 24"
+                            >
+                  <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                                <polyline points="14 2 14 8 20 8" />
+                            </svg>
+                            Select Files
+                        </button>
+              <button id="browse-folder" class="btn btn-secondary" type="button">
+                            <svg
+                                width="20"
+                                height="20"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                viewBox="0 0 24 24"
+                            >
+                  <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z" />
+                            </svg>
+                            Select Folder
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- File List -->
+        <div id="file-list-container" class="file-list-container hidden">
+                <div class="file-list-header">
+                    <h3>Files to Convert</h3>
+                    <div class="file-list-actions">
+              <button id="clear-all" class="btn btn-text" type="button">Clear All</button>
+                        <button id="add-more" class="btn btn-secondary" type="button">
+                            <svg
+                                width="16"
+                                height="16"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                viewBox="0 0 24 24"
+                            >
+                                <line x1="12" y1="5" x2="12" y2="19" />
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                            </svg>
+                            Add More
+                        </button>
+                    </div>
+                </div>
+                <div id="file-list" class="file-list"></div>
+            </div>
+
+            <!-- Conversion Options -->
+            <div id="conversion-options" class="conversion-options hidden">
+                <div class="options-grid">
+                    <div class="option-group">
+                        <h4>Output Settings</h4>
+                        <div class="option">
+                            <label for="output-dir">Output Directory</label>
+                            <div class="input-group">
+                  <input type="text" id="output-dir" readonly />
+                  <button id="change-output-dir" class="btn btn-secondary" type="button">
+                                    Browse
+                                </button>
+                            </div>
+                        </div>
+                        <div class="option">
+                            <label for="output-format">Output Format</label>
+                            <select id="output-format">
+                                <option value="epub" selected>EPUB (E-book)</option>
+                                <option value="mobi">MOBI (Kindle)</option>
+                                <option value="pdf">PDF (Optimized)</option>
+                                <option value="azw3">AZW3 (Kindle)</option>
+                            </select>
+                <small>
+                  <strong>EPUB:</strong> Universal e-book format, best compatibility across
+                  devices<br />
+                  <strong>MOBI:</strong> Optimized for older Kindle devices, smaller file size<br />
+                  <strong>PDF:</strong> Maintains original layout, good for documents with complex
+                  formatting<br />
+                  <strong>AZW3:</strong> Modern Kindle format with advanced features and compression
+                </small>
+              </div>
+            </div>
+
+            <div class="option-group">
+              <h4>Quick Presets</h4>
+              <div class="option">
+                <label for="conversion-preset">Device Preset</label>
+                <select id="conversion-preset">
+                  <option value="custom">Custom Settings</option>
+                  <option value="kindle-scribe">Kindle Scribe (1440x1920)</option>
+                  <option value="kindle-paperwhite">Kindle Paperwhite (1236x1648)</option>
+                  <option value="kindle-oasis">Kindle Oasis (1680x2520)</option>
+                  <option value="kindle-basic">Kindle Basic (800x600)</option>
+                  <option value="sync-optimized">Sync Optimized (Fast)</option>
+                  <option value="high-quality">High Quality (Best)</option>
+                  <option value="small-size">Small Size (Minimal)</option>
+                  <option value="balanced">Balanced (Recommended)</option>
+                </select>
+                <small
+                  >Select a preset optimized for your device or use case. Custom settings allow you
+                  to configure everything manually.</small
+                >
+                        </div>
+                    </div>
+
+                    <div class="option-group">
+                        <h4>Optimization</h4>
+                        <div class="option">
+                <label for="compression-level">Compression Level</label>
+                            <select id="compression-level">
+                  <option value="minimum">Minimum (Best Quality)</option>
+                  <option value="balanced" selected>Balanced</option>
+                  <option value="maximum">Maximum (Smallest Size)</option>
+                            </select>
+                <small>
+                  <strong>Minimum:</strong> Highest quality images, larger file sizes, best for
+                  scanned documents<br />
+                  <strong>Balanced:</strong> Good quality with reasonable file sizes, recommended
+                  for most use cases<br />
+                  <strong>Maximum:</strong> Smallest possible file sizes, reduced image quality,
+                  best for storage/transfer
+                </small>
+                        </div>
+                        <div class="option checkbox-option">
+                <input type="checkbox" id="optimize-kindle" checked />
+                <label for="optimize-kindle">Optimize for Kindle Devices</label>
+                <small
+                  >Enables Kindle-specific optimizations like fixed layout, proper metadata, and
+                  device-specific formatting for better reading experience on Kindle Scribe,
+                  Paperwhite, and other Kindle devices</small
+                            >
+                        </div>
+                        <div class="option checkbox-option">
+                <input type="checkbox" id="preserve-annotations" checked />
+                <label for="preserve-annotations">Preserve Annotation Support</label>
+                <small
+                  >Keeps annotation layers and markup capabilities in the converted file. Enable
+                  this if you plan to highlight, underline, or add notes to the e-book on your
+                  Kindle device</small
+                            >
+                        </div>
+                    </div>
+
+                    <div class="option-group">
+                        <h4>Image Settings</h4>
+                        <div class="option">
+                <label for="image-quality">Image Quality <span id="quality-value">85</span>%</label>
+                <input type="range" id="image-quality" min="50" max="100" value="85" step="5" />
+                <small>
+                  Controls JPEG compression quality for images. Higher values (90-100%) preserve
+                  more detail but create larger files. Lower values (50-70%) significantly reduce
+                  file size but may lose fine details. 85% is recommended for most documents.
+                </small>
+                        </div>
+                        <div class="option checkbox-option">
+                            <input type="checkbox" id="grayscale" />
+                <label for="grayscale">Convert to Grayscale</label>
+                <small
+                  >Removes color information from images, creating smaller files that may load
+                  faster on e-readers. Best for text-heavy documents where color isn't
+                  important.</small
+                >
+              </div>
+            </div>
+
+            <div class="option-group">
+              <h4>Advanced Processing</h4>
+              <div class="option checkbox-option">
+                <input type="checkbox" id="enable-ocr" />
+                <label for="enable-ocr">Enable OCR (Optical Character Recognition)</label>
+                <small
+                  >Extracts text from scanned PDFs or images using OCR. Significantly increases
+                  processing time but enables text search and selection in the converted
+                  e-book.</small
+                >
+              </div>
+              <div class="option" id="ocr-language-container" style="display: none">
+                <label for="ocr-language">OCR Language</label>
+                <select id="ocr-language" multiple size="3">
+                  <option value="eng" selected>English</option>
+                  <option value="spa">Spanish</option>
+                  <option value="fra">French</option>
+                  <option value="deu">German</option>
+                  <option value="ita">Italian</option>
+                  <option value="por">Portuguese</option>
+                  <option value="rus">Russian</option>
+                  <option value="chi_sim">Chinese Simplified</option>
+                  <option value="jpn">Japanese</option>
+                  <option value="kor">Korean</option>
+                </select>
+                <small
+                  >Select languages for OCR processing. Multiple languages can be selected (hold
+                  Ctrl/Cmd while clicking). More languages increase processing time.</small
+                >
+              </div>
+              <div class="option checkbox-option">
+                <input type="checkbox" id="auto-detect-scanned" checked />
+                <label for="auto-detect-scanned">Auto-detect scanned pages</label>
+                <small
+                  >Automatically enables OCR for pages that appear to be scanned images rather than
+                  selectable text. Recommended for mixed documents.</small
+                >
+              </div>
+              <div class="option">
+                <label for="processing-priority">Processing Priority</label>
+                <select id="processing-priority">
+                  <option value="low">Low (Background processing)</option>
+                  <option value="normal" selected>Normal</option>
+                  <option value="high">High (Faster processing)</option>
+                </select>
+                <small>
+                  <strong>Low:</strong> Minimal system impact, best for working while converting<br />
+                  <strong>Normal:</strong> Balanced performance, recommended for most users<br />
+                  <strong>High:</strong> Maximum speed, uses more system resources
+                </small>
+              </div>
+              <div class="option">
+                <label for="max-file-size">Maximum File Size (MB)</label>
+                <input type="number" id="max-file-size" min="10" max="650" value="650" step="10" />
+                <small
+                  >Maximum output file size in MB. Larger files may not be compatible with some
+                  e-readers or email services. Kindle Send-to-Kindle limit is 50MB.</small
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="option-group">
+            <h4>Batch Processing</h4>
+            <div class="option">
+              <label for="concurrent-jobs">Concurrent Conversions</label>
+              <select id="concurrent-jobs">
+                <option value="1">1 (Sequential)</option>
+                <option value="2" selected>2 (Recommended)</option>
+                <option value="3">3 (Fast)</option>
+                <option value="4">4 (High Performance)</option>
+              </select>
+              <small
+                >Number of files to convert simultaneously. Higher values use more system resources
+                but complete faster. Recommended: 2 for most systems.</small
+              >
+            </div>
+            <div class="option checkbox-option">
+              <input type="checkbox" id="skip-existing" />
+              <label for="skip-existing">Skip Existing Files</label>
+              <small
+                >If a converted file already exists in the output directory, skip the conversion
+                instead of overwriting it.</small
+              >
+            </div>
+            <div class="option checkbox-option">
+              <input type="checkbox" id="continue-on-error" checked />
+              <label for="continue-on-error">Continue on Errors</label>
+              <small
+                >If enabled, batch conversion will continue processing remaining files even if some
+                files fail to convert.</small
+              >
+            </div>
+            <div class="option">
+              <label for="batch-delay">Delay Between Conversions (ms)</label>
+              <input type="number" id="batch-delay" min="0" max="5000" value="1000" step="500" />
+              <small
+                >Delay between starting each conversion to reduce system load. 0 = no delay, 1000ms
+                = 1 second delay.</small
+              >
+            </div>
+          </div>
+
+          <div class="option-group">
+            <h4>Sync Optimization</h4>
+            <div class="option checkbox-option">
+              <input type="checkbox" id="optimize-for-sync" />
+              <label for="optimize-for-sync">Optimize for Device Sync</label>
+              <small
+                >Enables aggressive compression and format optimization specifically for faster
+                syncing to e-readers. Reduces file size by up to 70% for large documents.</small
+              >
+            </div>
+            <div class="option">
+              <label for="sync-target-size">Target Sync Size (MB)</label>
+              <select id="sync-target-size">
+                <option value="auto">Auto (Recommended)</option>
+                <option value="50">50MB (Kindle Send-to-Kindle)</option>
+                <option value="25">25MB (Fast sync)</option>
+                <option value="10">10MB (Very fast sync)</option>
+                <option value="no-limit">No limit</option>
+              </select>
+              <small
+                >Automatically adjust compression to fit within target size for optimal sync
+                performance.</small
+              >
+            </div>
+            <div class="option checkbox-option">
+              <input type="checkbox" id="progressive-loading" checked />
+              <label for="progressive-loading">Enable Progressive Loading</label>
+              <small
+                >Allows e-readers to start displaying content before full conversion is complete,
+                improving perceived performance.</small
+              >
+            </div>
+            <div class="option">
+              <label for="memory-optimization">Memory Optimization</label>
+              <select id="memory-optimization">
+                <option value="auto">Auto</option>
+                <option value="low-memory">Low Memory (Slower)</option>
+                <option value="balanced">Balanced</option>
+                <option value="high-performance">High Performance</option>
+              </select>
+              <small
+                >Controls memory usage during conversion. Low memory mode processes files in smaller
+                chunks but takes longer.</small
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Convert Button -->
+                <div class="convert-actions">
+                    <div class="convert-info">
+                        <span id="total-files">0 files selected</span>
+                        <span id="total-size">0 MB total</span>
+                    </div>
+          <button id="convert-btn" class="btn btn-primary btn-large" type="button">
+                        <svg
+                            width="20"
+                            height="20"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            viewBox="0 0 24 24"
+                        >
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12" />
+                        </svg>
+                        Start Conversion
+                    </button>
+            </div>
+
+            <!-- Progress Area -->
+            <div id="progress-area" class="progress-area hidden">
+                <h3>Converting Files...</h3>
+                <div id="progress-list" class="progress-list"></div>
+                <div class="progress-summary">
+                    <div class="progress-stats">
+              <span id="progress-current">0</span> / <span id="progress-total">0</span> files
+              completed
+                    </div>
+            <button id="cancel-conversion" class="btn btn-secondary" type="button">Cancel</button>
+                </div>
+            </div>
+
+            <!-- Results Area -->
+            <div id="results-area" class="results-area hidden">
+                <div class="results-header">
+                    <h3>Conversion Complete!</h3>
+                    <button id="new-conversion" class="btn btn-primary" type="button">
+                        New Conversion
+                    </button>
+                </div>
+                <div id="results-list" class="results-list"></div>
+                <div class="results-summary">
+                    <div class="summary-stats">
+                        <div class="stat">
+                            <span class="stat-label">Total Files:</span>
+                <span id="total-converted" class="stat-value">0</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Size Reduction:</span>
+                <span id="size-reduction" class="stat-value">0%</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Time Taken:</span>
+                <span id="time-taken" class="stat-value">0s</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Settings Modal -->
+      <div
+        id="settings-modal"
+        class="modal hidden"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="settings-modal-title"
+      >
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="settings-modal-title">Settings</h2>
+            <button
+              class="modal-close"
+              data-modal="settings-modal"
+              type="button"
+              aria-label="Close Settings"
+            >
+                        <svg
+                            width="24"
+                            height="24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            viewBox="0 0 24 24"
+                        >
+                            <line x1="18" y1="6" x2="6" y2="18" />
+                            <line x1="6" y1="6" x2="18" y2="18" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="settings-section">
+                        <h3>Default Settings</h3>
+                        <div class="setting-item">
+                <label for="default-output">Default Output Directory</label>
+                            <div class="input-group">
+                  <input type="text" id="default-output" readonly />
+                  <button id="change-default-output" class="btn btn-secondary" type="button">
+                                    Browse
+                                </button>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                <label for="default-quality">Default Image Quality</label>
+                <input type="range" id="default-quality" min="50" max="100" value="85" step="5" />
+                <span id="default-quality-value">85%</span>
+                <small
+                  >Default JPEG quality setting for all conversions. This can be overridden in
+                  individual conversion sessions.</small
+                >
+                        </div>
+                        <div class="setting-item">
+                <label for="default-format">Default Output Format</label>
+                            <select id="default-format">
+                                <option value="epub" selected>EPUB (E-book)</option>
+                                <option value="mobi">MOBI (Kindle)</option>
+                                <option value="pdf">PDF (Optimized)</option>
+                                <option value="azw3">AZW3 (Kindle)</option>
+                            </select>
+                <small>
+                  <strong>EPUB:</strong> Universal format, best compatibility<br />
+                  <strong>MOBI:</strong> Traditional Kindle format<br />
+                  <strong>PDF:</strong> Preserves original layout<br />
+                  <strong>AZW3:</strong> Modern Kindle format with advanced features
+                </small>
+                        </div>
+                        <div class="setting-item">
+                <label for="max-width">Maximum Image Width (pixels)</label>
+                <input type="number" id="max-width" min="600" max="2000" value="1200" step="100" />
+                <small
+                  >Maximum width for images in pixels. Larger values preserve more detail but create
+                  bigger files. Kindle Scribe optimal: 1200-1440px, Paperwhite: 800-1200px</small
+                >
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <h3>Kindle Integration</h3>
+                        <div class="setting-item checkbox-option">
+                            <input type="checkbox" id="auto-send-kindle" />
+                <label for="auto-send-kindle">Automatically send to Kindle after conversion</label>
+                <small
+                  >When enabled, converted files will be automatically emailed to your Kindle device
+                  using Amazon's Send to Kindle service. Files must be under 50MB for this to
+                  work.</small
+                            >
+                        </div>
+                        <div class="setting-item">
+                <label for="kindle-email">Kindle Email Address</label>
+                <input type="email" id="kindle-email" placeholder="your-kindle@kindle.com" />
+                <small
+                  >Your unique Kindle email address (found in your Amazon account settings under
+                  "Manage Content and Devices"). This is different from your regular email
+                  address.</small
+                >
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <h3>Advanced</h3>
+                        <div class="setting-item checkbox-option">
+                <input type="checkbox" id="include-metadata" checked />
+                <label for="include-metadata">Include searchable text metadata</label>
+                <small
+                  >Embeds extracted text content as metadata in the e-book file, enabling search
+                  functionality on e-readers that support text search within the book
+                  content.</small
+                            >
+                        </div>
+                        <div class="setting-item checkbox-option">
+                            <input type="checkbox" id="keep-temp-files" />
+                <label for="keep-temp-files">Keep temporary files for debugging</label>
+                <small
+                  >Preserves temporary files created during conversion in the system temp directory.
+                  Useful for troubleshooting conversion issues but consumes disk space.</small
+                >
+              </div>
+              <div class="setting-item">
+                <label for="default-ocr-language">Default OCR Languages</label>
+                <select id="default-ocr-language" multiple size="2">
+                  <option value="eng" selected>English</option>
+                  <option value="spa">Spanish</option>
+                  <option value="fra">French</option>
+                  <option value="deu">German</option>
+                  <option value="ita">Italian</option>
+                  <option value="por">Portuguese</option>
+                  <option value="rus">Russian</option>
+                  <option value="chi_sim">Chinese Simplified</option>
+                  <option value="jpn">Japanese</option>
+                  <option value="kor">Korean</option>
+                </select>
+                <small
+                  >Default languages for OCR processing when enabled. These will be pre-selected in
+                  the conversion options.</small
+                >
+              </div>
+              <div class="setting-item">
+                <label for="default-processing-priority">Default Processing Priority</label>
+                <select id="default-processing-priority">
+                  <option value="low">Low (Background processing)</option>
+                  <option value="normal" selected>Normal</option>
+                  <option value="high">High (Faster processing)</option>
+                </select>
+                <small
+                  >Default CPU priority for conversion processes. Affects system responsiveness
+                  during conversion.</small
+                            >
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="reset-settings" class="btn btn-text" type="button">
+                        Reset to Defaults
+                    </button>
+                    <div class="modal-actions">
+                        <button
+                            class="btn btn-secondary modal-close"
+                            data-modal="settings-modal"
+                            type="button"
+                        >
+                            Cancel
+                        </button>
+                        <button id="save-settings" class="btn btn-primary" type="button">
+                            Save Settings
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- About Modal -->
+      <div
+        id="about-modal"
+        class="modal hidden"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="about-modal-title"
+      >
+            <div class="modal-content modal-small">
+                <div class="modal-header">
+                    <h2 id="about-modal-title">About J.A.S.O.N.</h2>
+            <button
+              class="modal-close"
+              data-modal="about-modal"
+              type="button"
+              aria-label="Close About"
+            >
+                        <svg
+                            width="24"
+                            height="24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            viewBox="0 0 24 24"
+                        >
+                            <line x1="18" y1="6" x2="6" y2="18" />
+                            <line x1="6" y1="6" x2="18" y2="18" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="about-content">
+                        <div class="about-logo">
+                <svg width="64" height="64" viewBox="0 0 32 32" fill="none">
+                  <rect width="32" height="32" rx="6" fill="url(#about-gradient)" />
+                  <path d="M9 8h8v16H9V8z" fill="white" opacity="0.9" />
+                  <path d="M15 8h8v16h-8V8z" fill="white" opacity="0.7" />
+                                <defs>
+                    <linearGradient id="about-gradient" x1="0" y1="0" x2="32" y2="32">
+                      <stop offset="0%" stop-color="#667eea" />
+                      <stop offset="100%" stop-color="#764ba2" />
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                        </div>
+              <h3>Kompres</h3>
+              <p class="version">Version <span id="app-version">1.0.0</span></p>
+                        <p class="description">
+                A powerful PDF to EPUB converter optimized for Kindle devices, especially Kindle
+                Scribe. Maintains annotation support while significantly reducing file sizes.
+                        </p>
+                        <div class="about-features">
+                            <h4>Features:</h4>
+                            <ul>
+                  <li>✓ Optimized for Kindle Scribe annotations</li>
+                  <li>✓ Smart compression with quality preservation</li>
+                                <li>✓ Batch conversion support</li>
+                                <li>✓ Drag and drop interface</li>
+                                <li>✓ Customizable output settings</li>
+                            </ul>
+                        </div>
+                        <div class="about-tech">
+                            <p class="tech-info">
+                                Built with J.A.S.O.N.
+                                <span id="jasonet-cc"></span><br />
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+            <button class="btn btn-primary modal-close" data-modal="about-modal" type="button">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Container -->
+        <div id="toast-container" class="toast-container" aria-live="polite"></div>
+    </div>
+
+    <script src="renderer.js"></script>
+</body>
+</html>

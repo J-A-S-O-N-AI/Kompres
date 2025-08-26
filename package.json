@@ -1,0 +1,108 @@
+{
+  "name": "kompres",
+  "version": "1.0.0",
+  "description": "PDF converter optimized for Kindle Scribe with annotation support",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "build": "electron-builder",
+    "build:mac": "electron-builder --mac",
+    "build:win": "electron-builder --win --x64",
+    "build:linux": "electron-builder --linux",
+    "dist": "electron-builder --win --x64 --arm64",
+    "dist:x64": "electron-builder --win --x64",
+    "dist:arm64": "electron-builder --win --arm64",
+    "test": "jest",
+    "lint": "eslint src/ renderer/ --ext .js,.html",
+    "lint:fix": "eslint src/ renderer/ --ext .js,.html --fix && prettier --write \"src/**/*.{js,json}\" \"renderer/**/*.{js,html,css,json}\"",
+    "format": "prettier --write \"src/**/*.{js,json}\" \"renderer/**/*.{js,html,css,json}\"",
+    "postinstall": "electron-builder install-app-deps",
+    "release:local": "./scripts/release.sh --local",
+    "release:mac": "./scripts/release.sh --mac",
+    "release:all": "./scripts/release.sh --all",
+    "release:github": "./scripts/release.sh --github",
+    "prebuild": "npm run lint:fix",
+    "build:local": "cross-env CI=false DISABLE_CI_DETECTION=true BUILD_NUMBER=1 electron-builder --publish never",
+    "build:local:mac": "cross-env CI=false DISABLE_CI_DETECTION=true BUILD_NUMBER=1 electron-builder --mac --publish never",
+    "build:local:win": "cross-env CI=false DISABLE_CI_DETECTION=true BUILD_NUMBER=1 electron-builder --win --x64 --publish never",
+    "build:local:linux": "cross-env CI=false DISABLE_CI_DETECTION=true BUILD_NUMBER=1 electron-builder --linux --publish never"
+  },
+  "type": "module",
+  "keywords": [
+    "pdf",
+    "epub",
+    "kindle",
+    "converter",
+    "ebook"
+  ],
+  "author": {
+    "name": "J.A.S.O.N.",
+    "email": "jason@jasonet.cc"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "electron": "^37.3.1",
+    "electron-builder": "^26.0.19",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-html": "^8.1.1",
+    "jest": "^30.0.5",
+    "prettier": "^3.3.2"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.873.0",
+    "@google-cloud/storage": "^7.17.0",
+    "archiver": "^7.0.1",
+    "dropbox": "^10.34.0",
+    "electron-store": "^10.1.0",
+    "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^5.4.54",
+    "sharp": "^0.34.3",
+    "tesseract.js": "^6.0.1",
+    "usb": "^2.16.0",
+    "uuid": "^11.1.0"
+  },
+  "build": {
+    "appId": "cc.jasonet.kompres",
+    "productName": "Kompres",
+    "directories": {
+      "output": "dist"
+    },
+    "asarUnpack": [
+      "**/node_modules/sharp/**",
+      "**/node_modules/@img/**",
+      "**/node_modules/usb/**"
+    ],
+    "mac": {
+      "category": "public.app-category.productivity",
+      "icon": "assets/icon.icns",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ]
+    },
+    "win": {
+      "target": "nsis",
+      "defaultArch": "x64",
+      "icon": "assets/icon.ico"
+    },
+    "linux": {
+      "category": "Utility",
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "icon": "assets/icon.png"
+    },
+    "nsis": {
+      "include": "scripts/installer.nsh"
+    }
+  }
+}
