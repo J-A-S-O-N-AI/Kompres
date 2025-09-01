@@ -58,7 +58,7 @@
     "dropbox": "^10.34.0",
     "electron-store": "^10.1.0",
     "pdf-lib": "^1.17.1",
-    "pdfjs-dist": "^5.4.54",
+    "pdfjs-dist": "^5.4.149",
     "sharp": "^0.34.3",
     "tesseract.js": "^6.0.1",
     "usb": "^2.16.0",
